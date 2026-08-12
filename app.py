@@ -2,7 +2,7 @@ from flask import Flask, render_template
 
 app = Flask(__name__)
 
-name = "Elba Zurita"
+name = "Miguel Marin"
 contacto = "elba.zurita@gmail.com"
 
 @app.route("/")
