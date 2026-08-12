@@ -1,14 +1,400 @@
+ChatGPT dijo:
+Sí. Podemos hacerlo directamente con HTML/CSS/JavaScript, sin necesidad de una imagen externa: un Ferrari estilizado pasa por detrás, deja humo y el humo revela las letras.
+
 <!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-       <meta contacto="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Document</title>
-    </head>
-    <body>
-        <h1>Bienvenido a la clase, {{ person }}!</h1>
-        <p>Contacto: {{ contacto }}</p>
-        
-    </body>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bienvenido</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            height: 100vh;
+            overflow: hidden;
+            background: #000;
+            font-family: Arial, sans-serif;
+        }
+
+        .escena {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+            background:
+                radial-gradient(circle at 50% 55%, #250000 0%, #080000 35%, #000 70%);
+        }
+
+        /* Luz roja del fondo */
+        .luz {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            background: #ff0000;
+            filter: blur(180px);
+            opacity: .12;
+        }
+
+        /* TEXTO */
+        .texto {
+            position: absolute;
+            z-index: 10;
+            width: 100%;
+            top: 43%;
+            text-align: center;
+            color: #fff;
+            font-size: clamp(35px, 7vw, 90px);
+            font-weight: 900;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+
+            opacity: 0;
+            transform: scale(.4);
+            filter: blur(20px);
+
+            animation: letras 2s ease-out 2.2s forwards,
+                       brillo 2s ease-in-out 4.2s infinite alternate;
+        }
+
+        .texto span {
+            color: #ff0000;
+        }
+
+        /* CARRO */
+        .ferrari {
+            position: absolute;
+            z-index: 6;
+            left: -500px;
+            bottom: 23%;
+            width: 390px;
+            height: 130px;
+            animation: conducir 3.8s cubic-bezier(.65,0,.2,1) forwards;
+        }
+
+        .carro {
+            position: absolute;
+            width: 360px;
+            height: 75px;
+            bottom: 25px;
+            left: 15px;
+            background: linear-gradient(#ff3030, #b40000 65%, #650000);
+            border-radius: 90% 25% 15% 12%;
+            box-shadow:
+                0 8px 20px #ff0000,
+                inset 0 -8px 12px rgba(0,0,0,.6);
+        }
+
+        /* Parte superior del auto */
+        .techo {
+            position: absolute;
+            width: 175px;
+            height: 65px;
+            left: 105px;
+            top: -42px;
+            background: linear-gradient(135deg, #8d0000, #ff2020);
+            clip-path: polygon(15% 100%, 32% 0, 75% 0, 100% 100%);
+        }
+
+        /* Ventanas */
+        .ventana {
+            position: absolute;
+            width: 70px;
+            height: 38px;
+            top: -34px;
+            background: #050505;
+            border: 2px solid #ff3333;
+        }
+
+        .ventana.uno {
+            left: 122px;
+            transform: skew(-18deg);
+        }
+
+        .ventana.dos {
+            left: 198px;
+            transform: skew(18deg);
+        }
+
+        /* Ruedas */
+        .rueda {
+            position: absolute;
+            bottom: 0;
+            width: 65px;
+            height: 65px;
+            border-radius: 50%;
+            background: #050505;
+            border: 8px solid #222;
+            box-shadow: inset 0 0 0 8px #111;
+            animation: rueda .15s linear infinite;
+        }
+
+        .rueda::after {
+            content: "";
+            position: absolute;
+            width: 18px;
+            height: 18px;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            background: #aaa;
+            border-radius: 50%;
+        }
+
+        .rueda.trasera {
+            left: 55px;
+        }
+
+        .rueda.delantera {
+            right: 45px;
+        }
+
+        /* Luces */
+        .luz-auto {
+            position: absolute;
+            right: 3px;
+            top: 20px;
+            width: 35px;
+            height: 12px;
+            background: white;
+            border-radius: 50%;
+            box-shadow: 0 0 25px 10px #fff;
+        }
+
+        /* Humo */
+        .humo {
+            position: absolute;
+            z-index: 5;
+            left: -150px;
+            bottom: 24%;
+            width: 600px;
+            height: 170px;
+            opacity: 0;
+            animation: humo 3.5s ease-out 1.1s forwards;
+        }
+
+        .humo span {
+            position: absolute;
+            bottom: 0;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: rgba(220,220,220,.35);
+            filter: blur(18px);
+            animation: humoSubir 2s ease-out infinite;
+        }
+
+        .humo span:nth-child(1) {
+            left: 50px;
+            animation-delay: .1s;
+        }
+
+        .humo span:nth-child(2) {
+            left: 120px;
+            width: 110px;
+            height: 110px;
+            animation-delay: .3s;
+        }
+
+        .humo span:nth-child(3) {
+            left: 220px;
+            width: 130px;
+            height: 130px;
+            animation-delay: .5s;
+        }
+
+        .humo span:nth-child(4) {
+            left: 340px;
+            width: 100px;
+            height: 100px;
+            animation-delay: .7s;
+        }
+
+        /* Partículas rojas */
+        .particulas {
+            position: absolute;
+            z-index: 8;
+            left: 50%;
+            top: 50%;
+        }
+
+        .particulas i {
+            position: absolute;
+            width: 5px;
+            height: 5px;
+            background: #ff0000;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #ff0000;
+            animation: particula 2s ease-out forwards;
+            animation-delay: 2s;
+        }
+
+        .particulas i:nth-child(1) { --x: -300px; --y: -100px; }
+        .particulas i:nth-child(2) { --x: 300px; --y: -130px; }
+        .particulas i:nth-child(3) { --x: -250px; --y: 100px; }
+        .particulas i:nth-child(4) { --x: 250px; --y: 100px; }
+        .particulas i:nth-child(5) { --x: -150px; --y: -160px; }
+        .particulas i:nth-child(6) { --x: 160px; --y: -170px; }
+
+        @keyframes conducir {
+            0% {
+                left: -500px;
+                transform: scale(.9);
+            }
+
+            45% {
+                left: 35%;
+                transform: scale(1.05);
+            }
+
+            100% {
+                left: 110%;
+                transform: scale(.95);
+            }
+        }
+
+        @keyframes rueda {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes humo {
+            0% {
+                opacity: 0;
+                transform: translateX(0) scale(.4);
+            }
+
+            30% {
+                opacity: .9;
+            }
+
+            100% {
+                opacity: .8;
+                transform: translateX(400px) scale(1.5);
+            }
+        }
+
+        @keyframes humoSubir {
+            0% {
+                transform: translateY(0) scale(.6);
+                opacity: .1;
+            }
+
+            50% {
+                opacity: .6;
+            }
+
+            100% {
+                transform: translateY(-100px) scale(1.4);
+                opacity: 0;
+            }
+        }
+
+        @keyframes letras {
+            0% {
+                opacity: 0;
+                transform: scale(.4);
+                filter: blur(20px);
+            }
+
+            60% {
+                opacity: 1;
+                transform: scale(1.15);
+                filter: blur(3px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: scale(1);
+                filter: blur(0);
+            }
+        }
+
+        @keyframes brillo {
+            from {
+                text-shadow:
+                    0 0 5px #ff0000,
+                    0 0 15px #ff0000;
+            }
+
+            to {
+                text-shadow:
+                    0 0 10px #ff0000,
+                    0 0 30px #ff0000,
+                    0 0 60px #8b0000;
+            }
+        }
+
+        @keyframes particula {
+            0% {
+                transform: translate(0,0) scale(1);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translate(var(--x),var(--y)) scale(0);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="escena">
+
+    <div class="luz"></div>
+
+    <!-- Humo que deja el auto -->
+    <div class="humo">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+
+    <!-- Ferrari estilizado -->
+    <div class="ferrari">
+
+        <div class="carro">
+            <div class="techo"></div>
+
+            <div class="ventana uno"></div>
+            <div class="ventana dos"></div>
+
+            <div class="luz-auto"></div>
+
+            <div class="rueda trasera"></div>
+            <div class="rueda delantera"></div>
+        </div>
+
+    </div>
+
+    <!-- Partículas que salen del humo -->
+    <div class="particulas">
+        <i></i>
+        <i></i>
+        <i></i>
+        <i></i>
+        <i></i>
+        <i></i>
+    </div>
+
+    <!-- Letras -->
+    <div class="texto">
+        Bienvenido a <span>nuestra página</span>
+    </div>
+
+</div>
+
+</body>
 </html>
